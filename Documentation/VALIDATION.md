@@ -42,8 +42,8 @@ change assigns an explicit local dependency name so the example no longer depend
 on the checkout directory name; the release-preparation candidate was then
 tested from a renamed checkout as described below.
 
-Linux x86-64, iOS, other Apple platforms and Windows have not been run by this
-package's test suite. A cross-build would not establish runtime behavior. No
+At that point Linux x86-64, iOS, other Apple platforms and Windows had not
+been run by this package's test suite. A cross-build would not establish runtime behavior. No
 browser or conformance suite has been run for SwiftHTML itself. These tests do
 not establish complete HTML or CSS conformance.
 
@@ -111,5 +111,21 @@ local-only `0.0.1` tag. This is a distribution mechanism test, not a published
 version, a GitHub download test, or a release. The private GitHub repository was
 empty when checked; hosted CI and publicly resolved version tags remain untested.
 The prepared Linux workflow pins the same multi-architecture Swift image digest
-and has not yet run on GitHub. No Linux x86-64, final app archive, or binary-only
-redistribution was tested for this candidate.
+and has not yet run on GitHub. No final app archive or binary-only redistribution
+was tested for this candidate.
+
+Commit `9ccb0f058c12c4a00d9b78585de2d06c01e0f672` was tested on Linux ARM64
+with the same Swift 6.2.4 image: source and notice verification, 14 debug tests,
+a release build, 14 release tests, a consumer from a renamed checkout, and the
+synthetic local-version consumer all passed. The versioned consumer also passed
+on macOS arm64 with Swift 6.4.2. The only changes from the prior candidate were
+the changelog, documentation and a pinned CI image.
+
+The same commit was additionally exercised as Linux x86-64 **under QEMU
+emulation**, not on a native x86-64 host. Fourteen debug tests and the release
+library build passed. The first release-test build with two parallel jobs ended
+in a Swift compiler signal 4 without a usable backtrace. A clean retry with one
+job passed all 14 release tests. The cause of the first failure is unknown;
+the prepared native GitHub x86-64 CI and a real public versioned consumer must
+still be tested after a release is authorized. The x86-64 versioned consumer
+was not run in this emulated check.
