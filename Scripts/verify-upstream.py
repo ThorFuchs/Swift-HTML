@@ -17,7 +17,10 @@ def verify(reference):
     info = json.loads((VENDOR / 'UPSTREAM.json').read_text(encoding='utf-8'))
     if (info.get('repository'), info.get('tag'), info.get('commit'), info.get('sources_tree'),
             info.get('transformations')) != ('https://github.com/scinfu/SwiftSoup.git',
-                                             '2.14.4', REVISION, TREE, []):
+                                             '2.14.4', REVISION, TREE, [{
+                                                 'description': 'Replace module qualification SwiftSoup. with SwiftHTMLBackend. for isolated target',
+                                                 'files_and_counts': {'Sources/Attributes.swift': 8, 'Sources/Token.swift': 7, 'Sources/XmlTreeBuilder.swift': 2, 'Sources/SwiftSoup.swift': 3}
+                                             }]):
         raise ValueError('unexpected upstream identity or modifications')
     expected = info['files_sha256']
     if len(expected) != 64 or 'LICENSE' not in expected:
@@ -41,11 +44,16 @@ def verify(reference):
         if path.is_absolute() or '..' in path.parts or not (name == 'LICENSE' or name.startswith('Sources/')):
             raise ValueError(f'forbidden path: {name}')
         data = (VENDOR / path).read_bytes()
+        counts = info['transformations'][0]['files_and_counts']
+        if name in counts:
+            if data.count(b'SwiftHTMLBackend.') != counts[name] or b'SwiftSoup.' in data:
+                raise ValueError(f'unexpected transformation: {name}')
+            data = data.replace(b'SwiftHTMLBackend.', b'SwiftSoup.')
         if hashlib.sha256(data).hexdigest() != digest:
             raise ValueError(f'checksum mismatch: {name}')
         if reference and git('show', REVISION + ':' + name) != data:
             raise ValueError(f'upstream bytes differ: {name}')
-    print(f'SwiftSoup {info["tag"]}: {len(expected)} original files verified; '
+    print(f'SwiftSoup {info["tag"]}: {len(expected)} upstream files verified after reversing documented module renaming; '
           f'independent Git comparison: {bool(reference)}; no upstream test fixtures')
 
 

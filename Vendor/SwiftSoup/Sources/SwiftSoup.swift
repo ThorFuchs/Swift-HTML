@@ -1,5 +1,5 @@
 //
-//  SwiftSoup.swift
+//  SwiftHTMLBackend.swift
 //  Jsoup
 //
 //  Created by Nabil Chatbi on 29/09/16.
@@ -416,7 +416,7 @@ import Foundation
 	 - seealso: ``Cleaner/clean(_:)``
 	*/
 	public func clean(_ bodyHtml: String, _ whitelist: Whitelist) throws -> String? {
-		return try SwiftSoup.clean(bodyHtml, "", whitelist)
+		return try SwiftHTMLBackend.clean(bodyHtml, "", whitelist)
 	}
 
 	/**
@@ -433,7 +433,7 @@ import Foundation
 	public func clean(
         _ bodyHtml: String, _ baseUri: String, _ whitelist: Whitelist, _ outputSettings: OutputSettings
     ) throws -> String? {
-		let dirty: Document = try SwiftSoup.parseBodyFragment(bodyHtml, baseUri)
+		let dirty: Document = try SwiftHTMLBackend.parseBodyFragment(bodyHtml, baseUri)
 		let cleaner: Cleaner = Cleaner(whitelist)
 		let clean: Document = try cleaner.clean(dirty)
 		clean.outputSettings(outputSettings)

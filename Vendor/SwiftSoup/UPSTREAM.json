@@ -5,7 +5,17 @@
   "sources_tree": "f8472ba94c5dd20e84cc531ff046e7ad1029cdfa",
   "license": "MIT; see LICENSE",
   "scope": "Upstream Sources and LICENSE only; no tests, test fixtures, assets or Git history",
-  "transformations": [],
+  "transformations": [
+    {
+      "description": "Replace module qualification SwiftSoup. with SwiftHTMLBackend. for isolated target",
+      "files_and_counts": {
+        "Sources/Attributes.swift": 8,
+        "Sources/SwiftSoup.swift": 3,
+        "Sources/Token.swift": 7,
+        "Sources/XmlTreeBuilder.swift": 2
+      }
+    }
+  ],
   "files_sha256": {
     "LICENSE": "6d9f121428f5571c4e20362fa91186c552f82648c0161dacc12e239b1544d49d",
     "Sources/Attribute.swift": "79ecd64a62fc63c20e7b0a9dfa5a1ad4416e22619e33a6ebcdda46123b4f5d7e",
