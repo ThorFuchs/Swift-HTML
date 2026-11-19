@@ -4,6 +4,17 @@ SwiftHTML is a small SwiftPM library for parsing, querying, and editing HTML.
 It wraps a fixture-free SwiftSoup 2.14.4 source snapshot in an independent API.
 The library itself has no network or browser runtime dependency.
 
+## Installation
+
+Add SwiftHTML to your Swift package dependencies:
+
+```swift
+.package(url: "https://github.com/ThorFuchs/Swift-HTML.git", from: "0.1.0")
+```
+
+Add `.product(name: "SwiftHTML", package: "Swift-HTML")` to your target's
+dependencies, then import `SwiftHTML`.
+
 ```swift
 import SwiftHTML
 

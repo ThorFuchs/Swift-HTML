@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.0 — 2026-11-19
 
 - Add document and body-context fragment parsing, CSS selection, text and
   attribute access, mutable elements, and HTML serialization.
