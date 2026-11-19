@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Test an exact revision with a synthetic version in an isolated local repository."""
 import argparse
+import os
 from pathlib import Path
 import subprocess
 import tempfile
@@ -11,7 +12,17 @@ VERSION = '0.0.1'  # Synthetic, in the temporary repository only; not a release.
 
 
 def run(*args, cwd=None, capture=False):
-    return subprocess.run(args, cwd=cwd, check=True, text=True,
+    # GitHub Actions checks out on the host but runs the job as container root.
+    # Scope trust to this checkout and its upload-pack directory for child Git
+    # processes; do not change global Git configuration or trust other paths.
+    env = os.environ.copy()
+    index = int(env.get('GIT_CONFIG_COUNT', '0'))
+    for path in (ROOT, ROOT / '.git'):
+        env[f'GIT_CONFIG_KEY_{index}'] = 'safe.directory'
+        env[f'GIT_CONFIG_VALUE_{index}'] = str(path)
+        index += 1
+    env['GIT_CONFIG_COUNT'] = str(index)
+    return subprocess.run(args, cwd=cwd, check=True, text=True, env=env,
                           stdout=subprocess.PIPE if capture else None).stdout
 
 

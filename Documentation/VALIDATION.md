@@ -108,11 +108,11 @@ the packaged MIT resources and Apache source license.
 
 Both versioned consumers used a fresh temporary bare Git clone with a synthetic
 local-only `0.0.1` tag. This is a distribution mechanism test, not a published
-version, a GitHub download test, or a release. The private GitHub repository was
-empty when checked; hosted CI and publicly resolved version tags remain untested.
-The prepared Linux workflow pins the same multi-architecture Swift image digest
-and has not yet run on GitHub. No final app archive or binary-only redistribution
-was tested for this candidate.
+version, a GitHub download test, or a release. At the time of that check the
+private GitHub repository was empty, so hosted CI and publicly resolved version
+tags had not yet been tested. The prepared Linux workflow pins the same
+multi-architecture Swift image digest. No final app archive or binary-only
+redistribution was tested for this candidate.
 
 Commit `9ccb0f058c12c4a00d9b78585de2d06c01e0f672` was tested on Linux ARM64
 with the same Swift 6.2.4 image: source and notice verification, 14 debug tests,
@@ -126,6 +126,17 @@ emulation**, not on a native x86-64 host. Fourteen debug tests and the release
 library build passed. The first release-test build with two parallel jobs ended
 in a Swift compiler signal 4 without a usable backtrace. A clean retry with one
 job passed all 14 release tests. The cause of the first failure is unknown;
-the prepared native GitHub x86-64 CI and a real public versioned consumer must
-still be tested after a release is authorized. The x86-64 versioned consumer
+a native GitHub x86-64 CI run and a real public versioned consumer were still
+needed at that point. The x86-64 versioned consumer
 was not run in this emulated check.
+
+## Initial hosted CI run
+
+The first GitHub Linux x86-64 run for commit
+`89e0f8e3b2fdec5ca6cff152cef35aae1ba74cca` passed debug tests, release build,
+release tests and the release consumer, but its final versioned-consumer gate
+failed because the container ran as a different owner from the host checkout.
+The test harness now scopes Git's `safe.directory` setting to the current
+checkout and its `.git` directory for its subprocesses, without changing global
+Git configuration. See the repository’s GitHub Actions runs for the corrected
+commit’s result.
