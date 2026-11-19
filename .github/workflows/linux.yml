@@ -1,0 +1,45 @@
+# SPDX-License-Identifier: Apache-2.0
+name: Linux
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  swiftpm:
+    name: Swift 6.2.4 on Linux
+    runs-on: ubuntu-24.04
+    container: swift:6.2.4
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Record environment
+        run: |
+          cat /etc/os-release
+          uname -sm
+          swift --version
+      - name: Install Python for the provenance check
+        run: |
+          apt-get update -qq
+          apt-get install -y --no-install-recommends python3
+      - name: Verify vendored source inventory
+        run: |
+          python3 Scripts/verify-upstream.py
+          python3 Scripts/verify-notices.py
+      - name: Test debug configuration
+        run: swift test -j 4
+      - name: Build optimized library
+        run: swift build -c release -j 4 -Xswiftc -no-whole-module-optimization
+      - name: Test optimized configuration
+        run: swift test -c release -j 4 -Xswiftc -no-whole-module-optimization
+      - name: Run release consumer
+        run: swift run --package-path Examples/Consumer -c release -j 4 -Xswiftc -no-whole-module-optimization
+      - name: Verify a local versioned consumer and bundled notices
+        run: python3 Scripts/test-versioned-consumer.py "$GITHUB_SHA"

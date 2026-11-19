@@ -42,14 +42,15 @@ and its referenced element, but detached parent links are weak: retain an ancest
 explicitly if a detached subtree must remain intact after other references vanish.
 
 `setText`, `appendText`, attribute operations, `appendHTML`, `setInnerHTML`,
-`insertHTMLBefore`, `insertTextBefore`, and `remove` mutate the shared tree; existing element references remain live and retain the owning
-document. Neither documents nor elements are `Sendable`: confine a tree to one
+`insertHTMLBefore`, `insertTextBefore`, and `remove` mutate the shared tree;
+existing element references remain live and retain the owning document. Neither documents nor elements are `Sendable`: confine a tree to one
 isolation domain or synchronize all accesses externally.
 
 Text and attribute setters treat their inputs as data and the HTML serializer
 escapes where required by its output syntax. HTML raw-text elements such as
 `script` and `style` have special serialization rules; do not use text setters
-as an HTML-sanitization mechanism there. `appendHTML`, `setInnerHTML`, and `insertHTMLBefore` explicitly parse markup:
+as an HTML-sanitization mechanism there. `appendHTML`, `setInnerHTML`, and `insertHTMLBefore` explicitly
+parse markup:
 only pass HTML appropriate for the caller's trust boundary. Parsing, selecting,
 and serializing do **not** sanitize untrusted HTML, URLs, CSS, scripts, or SVG.
 `setInnerHTML` parses before removing existing children, preserving the element
@@ -64,3 +65,10 @@ Swift tools 6.0 or newer are required. The public target compiles in Swift 6
 language mode, while the vendored backend compiles in Swift 5 language mode.
 No SwiftSoup types appear in the public API. See [validation and integration](Documentation/VALIDATION.md)
 and [third-party provenance](Documentation/THIRD_PARTY.md).
+
+## License
+
+SwiftHTML's own code is licensed under [Apache 2.0](LICENSE). Its vendored
+SwiftSoup and LRUCache components retain their MIT licenses, including the
+jsoup copyright notices. Complete notices, provenance, and redistribution
+guidance are in [third-party provenance](Documentation/THIRD_PARTY.md).

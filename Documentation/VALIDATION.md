@@ -23,10 +23,28 @@ and executed parse/query operations in each. The independent upstream archive,
 including its tests and fixtures, was used only in the temporary experiment;
 none was copied into this repository.
 
-The local environment's Docker daemon was unavailable. Linux execution has not
-been performed; iOS, other Apple platforms and Windows have not been run. A
-cross-build would not establish runtime behavior. No browser or conformance suite
-has been run. These tests do not establish complete HTML or CSS conformance.
+On 2026-11-19, the exact SwiftHTML commit
+`8bc39e2bd950c89f79fcb006ec552edee0926a2e` was also executed natively on Linux
+ARM64 inside an Ubuntu 24.04.5 container using Swift 6.2.4
+(`aarch64-unknown-linux-gnu`). The image was `swift:6.2.4`, manifest digest
+`sha256:3459518b2e723a7c363d0f8cfa44fc796c77ecd8c18e92fd10e6f92dd78c0b12`.
+Its Docker host was an Ubuntu 24.04.4 ARM64 Colima 0.10.3 VM on Apple Silicon,
+with Linux kernel 6.8.0-117-generic, Docker Engine 29.5.2, four CPUs and 8 GiB
+RAM. Debug and release each passed all 14 XCTest cases; `swift build -c release`
+and the release example consumer also succeeded. Release commands used
+`-Xswiftc -no-whole-module-optimization`. Python 3 was installed in the
+temporary container for the vendored-source verification, which passed.
+
+The first consumer attempt failed when the checkout was named `/work`: the
+example's path dependency currently assumes the directory name `Swift-HTML`.
+It passed in a clean `/work/Swift-HTML` checkout. The later release-preparation
+change assigns an explicit local dependency name so the example no longer depends
+on the checkout directory name; that change requires its own validation.
+
+Linux x86-64, iOS, other Apple platforms and Windows have not been run by this
+package's test suite. A cross-build would not establish runtime behavior. No
+browser or conformance suite has been run for SwiftHTML itself. These tests do
+not establish complete HTML or CSS conformance.
 
 ## Read-only SwiftMD assessment
 
@@ -57,3 +75,21 @@ against SwiftMD's `BlocksTests`, `NodeTests`, `JavaScriptCoreCompilerTests`,
 `IntegratedCompilerTests`, and browser test, including real renderer and
 byte-identical default-path checks. Run its distribution/consumer tests as well.
 No integration has been implemented, run, or claimed here.
+
+## SwiftMD cross-project Linux run
+
+On 2026-11-19, local SwiftMD commit
+`7b47a5a3c2660732fc408396ff79c3ea3370ac13` and SwiftHTML commit
+`8bc39e2bd950c89f79fcb006ec552edee0926a2e` were cloned from local Git bundles
+into a separate Linux ARM64 container using the environment above. Node 24.22.1
+was checked against the official SHA-256 list. `Scripts/test-all.sh` passed:
+704 fixture expectations, 705 comparisons against independently built pinned
+cmark-gfm, 22 Linux adapter tests, seven CLI tests, five Linux limit tests and
+14 supervisor tests. Its published-GFM audit confirmed documented baseline
+mismatches; it does not establish complete conformance.
+
+The release CLI build and seven CLI tests passed. The mirror policy and
+local distribution tests passed, including a consumer and coexistence with
+separate SwiftSoup. Distribution tags were synthetic and remained local to the
+container. JavaScriptCore, browser rendering, Linux x86-64, systemd and cgroup
+behavior were not tested in this run. No artifacts were published.

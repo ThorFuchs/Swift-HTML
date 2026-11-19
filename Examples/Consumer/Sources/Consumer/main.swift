@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import SwiftHTML
 
 let document = try HTMLDocument.parseFragment("<pre><code>Hello  &amp; welcome\n</code></pre>")

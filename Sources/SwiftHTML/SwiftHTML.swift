@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 internal import SwiftHTMLBackend
 
 /// An operation failed. Details originate in the parser and are diagnostic, not stable API.

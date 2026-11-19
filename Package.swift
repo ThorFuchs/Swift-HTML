@@ -1,4 +1,5 @@
 // swift-tools-version: 6.0
+// SPDX-License-Identifier: Apache-2.0
 import PackageDescription
 
 let package = Package(
@@ -12,6 +13,7 @@ let package = Package(
             swiftSettings: [.swiftLanguageMode(.v5)]
         ),
         .target(name: "SwiftHTML", dependencies: ["SwiftHTMLBackend"],
+                resources: [.copy("Resources/ThirdPartyLicenses")],
                 swiftSettings: [.swiftLanguageMode(.v6)]),
         .testTarget(name: "SwiftHTMLTests", dependencies: ["SwiftHTML"],
                     swiftSettings: [.swiftLanguageMode(.v6)])

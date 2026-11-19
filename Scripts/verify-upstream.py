@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
 """Check the pinned, fixture-free SwiftSoup snapshot; optionally compare Git."""
 import argparse
 import hashlib

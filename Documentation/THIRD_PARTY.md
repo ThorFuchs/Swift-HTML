@@ -6,7 +6,10 @@ commit `8397a860c6955924b584c50c5265c6aac0970015`, `Sources` tree
 Jonathan Hedley's jsoup copyright and Nabil Chatbi's Swift-port copyright, is
 preserved at [Vendor/SwiftSoup/LICENSE](../Vendor/SwiftSoup/LICENSE). The
 source also contains the MIT notice for Nick Lockwood's LRUCache in that file.
-Retain all source-level notices when redistributing.
+Complete copies of both notices are also packaged as SwiftPM resources under
+[ThirdPartyLicenses](../Sources/SwiftHTML/Resources/ThirdPartyLicenses). Run
+`python3 Scripts/verify-notices.py` to check their contents against the vendor
+files. Retain the original source-level notices when redistributing.
 
 Only upstream `Sources` and `LICENSE` are included, not upstream tests or their
 third-party webpage fixtures. `UPSTREAM.json` contains original hashes. Four
@@ -24,5 +27,12 @@ hashes and the file inventory, and optionally compares the pinned Git tree and
 file contents. On 2026-11-19, `git ls-remote` showed the public `2.14.4` tag
 at the pinned commit; the pinned upstream `Package.swift` has no external
 package dependencies. Checksums and a license inventory are not a legal review
-or security audit. This repository does not yet specify a license for its own
-new code; the upstream license does not establish one.
+or security audit. SwiftHTML's own code is licensed under Apache 2.0; the
+upstream MIT terms remain applicable to the vendored code.
+
+SwiftPM resource bundles are a useful way to carry notices into ordinary
+consumers, and a versioned consumer test checks their bytes in the generated
+build products. A raw static library, standalone executable, container image,
+or repackaged app can be distributed without those resource bundles: distributors
+must include the complete applicable license notices with each artifact and
+verify the final package. This inventory is not a substitute for a legal review.
