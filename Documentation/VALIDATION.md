@@ -39,7 +39,8 @@ The first consumer attempt failed when the checkout was named `/work`: the
 example's path dependency currently assumes the directory name `Swift-HTML`.
 It passed in a clean `/work/Swift-HTML` checkout. The later release-preparation
 change assigns an explicit local dependency name so the example no longer depends
-on the checkout directory name; that change requires its own validation.
+on the checkout directory name; the release-preparation candidate was then
+tested from a renamed checkout as described below.
 
 Linux x86-64, iOS, other Apple platforms and Windows have not been run by this
 package's test suite. A cross-build would not establish runtime behavior. No
@@ -93,3 +94,22 @@ local distribution tests passed, including a consumer and coexistence with
 separate SwiftSoup. Distribution tags were synthetic and remained local to the
 container. JavaScriptCore, browser rendering, Linux x86-64, systemd and cgroup
 behavior were not tested in this run. No artifacts were published.
+
+## Release-preparation candidate
+
+On 2026-11-19, commit `1adc3d1801cb27756b14eb272ac8054c070d5784` was tested
+on macOS arm64 with Apple Swift 6.4.2: all 14 tests, the release library build,
+and a clean version-based consumer passed. The consumer verified both bundled
+third-party notices byte for byte. On the Linux ARM64 environment described
+above, the same commit passed upstream and notice verification, 14 debug tests,
+a release build, 14 release tests, and a release consumer from a deliberately
+renamed checkout. A separate version-based consumer also passed and verified
+the packaged MIT resources and Apache source license.
+
+Both versioned consumers used a fresh temporary bare Git clone with a synthetic
+local-only `0.0.1` tag. This is a distribution mechanism test, not a published
+version, a GitHub download test, or a release. The private GitHub repository was
+empty when checked; hosted CI and publicly resolved version tags remain untested.
+The prepared Linux workflow pins the same multi-architecture Swift image digest
+and has not yet run on GitHub. No Linux x86-64, final app archive, or binary-only
+redistribution was tested for this candidate.
