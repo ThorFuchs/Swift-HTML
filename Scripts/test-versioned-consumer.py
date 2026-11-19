@@ -41,7 +41,7 @@ let package = Package(name: "Consumer", dependencies: [
 ])])
 ''' % (repository.as_uri(), VERSION))
         (consumer / 'Sources/Consumer/main.swift').write_text('''import SwiftHTML
-let document = try HTMLDocument.parseFragment("<pre><code>A  &amp; B\\n</code></pre>
+let document = try HTMLDocument.parseFragment("<pre><code>A  &amp; B\\n</code></pre>")
 let code = try document.select("pre > code").first!
 precondition(code.directText() == "A  & B\\n")
 print("Versioned consumer passed")
