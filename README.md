@@ -9,7 +9,7 @@ The library itself has no network or browser runtime dependency.
 Add SwiftHTML to your Swift package dependencies:
 
 ```swift
-.package(url: "https://github.com/ThorFuchs/Swift-HTML.git", from: "0.1.0")
+.package(url: "https://github.com/ThorFuchs/Swift-HTML.git", from: "0.1.1")
 ```
 
 Add `.product(name: "SwiftHTML", package: "Swift-HTML")` to your target's
@@ -74,6 +74,9 @@ or document-size limits.
 
 Swift tools 6.0 or newer are required. The public target compiles in Swift 6
 language mode, while the vendored backend compiles in Swift 5 language mode.
+The declared minimum Apple deployment targets are macOS 10.15, iOS 13,
+tvOS 13, watchOS 6, Mac Catalyst 13.1 and visionOS 1. These are build targets;
+see the validation document for the specific platforms and runtimes tested.
 No SwiftSoup types appear in the public API. See [validation and integration](Documentation/VALIDATION.md)
 and [third-party provenance](Documentation/THIRD_PARTY.md).
 

@@ -1,0 +1,85 @@
+# SPDX-License-Identifier: Apache-2.0
+name: Apple platforms
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+
+jobs:
+  macos-consumer:
+    name: macOS Intel / Swift 6.1.2 consumer
+    runs-on: macos-15-intel
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify runner and compiler
+        run: |
+          test "$(uname -m)" = x86_64
+          xcodebuild -version
+          swift --version | tee /tmp/swifthtml-swift-version.txt
+          grep -F 'Apple Swift version 6.1.2' /tmp/swifthtml-swift-version.txt
+      - name: Test package
+        run: |
+          xcrun swiftc -typecheck -swift-version 5 -module-name SwiftHTMLBackend \
+            -target x86_64-apple-macosx10.15 -sdk "$(xcrun --sdk macosx --show-sdk-path)" \
+            Vendor/SwiftSoup/Sources/*.swift
+          swift test -j 4
+          swift build -c release -j 4
+      - name: Build and run ordinary macOS 15 consumer
+        run: |
+          swift build --package-path Examples/DeploymentConsumer -v -j 4 2>&1 | tee /tmp/swifthtml-consumer-build.log
+          python3 Scripts/check-deployment-build.py /tmp/swifthtml-consumer-build.log
+          swift run --package-path Examples/DeploymentConsumer DeploymentConsumer
+      - name: Test exact revision as a versioned consumer
+        run: python3 Scripts/test-versioned-consumer.py "$GITHUB_SHA"
+  apple-build:
+    name: ${{ matrix.name }} package build
+    runs-on: macos-15-intel
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: iOS
+            destination: generic/platform=iOS Simulator
+            sdk: iphoneos
+            triple: arm64-apple-ios13.0
+          - name: tvOS
+            destination: generic/platform=tvOS Simulator
+            sdk: appletvos
+            triple: arm64-apple-tvos13.0
+          - name: watchOS
+            destination: generic/platform=watchOS Simulator
+            sdk: watchsimulator
+            triple: arm64-apple-watchos6.0-simulator
+          - name: Mac Catalyst
+            destination: generic/platform=macOS,variant=Mac Catalyst
+            sdk: macosx
+            triple: x86_64-apple-ios13.1-macabi
+          - name: visionOS
+            destination: generic/platform=visionOS Simulator
+            sdk: xros
+            triple: arm64-apple-xros1.0
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Check backend at declared minimum
+        run: |
+          xcrun swiftc -typecheck -swift-version 5 -module-name SwiftHTMLBackend \
+            -target '${{ matrix.triple }}' -sdk "$(xcrun --sdk '${{ matrix.sdk }}' --show-sdk-path)" \
+            Vendor/SwiftSoup/Sources/*.swift
+      - name: Build complete SwiftHTML product
+        run: |
+          xcodebuild -scheme SwiftHTML -destination '${{ matrix.destination }}' \
+            -derivedDataPath "$RUNNER_TEMP/swifthtml-build" CODE_SIGNING_ALLOWED=NO build

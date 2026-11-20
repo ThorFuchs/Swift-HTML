@@ -4,6 +4,10 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftHTML",
+    platforms: [
+        .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6),
+        .macCatalyst("13.1"), .visionOS(.v1)
+    ],
     products: [.library(name: "SwiftHTML", targets: ["SwiftHTML"])],
     targets: [
         .target(

@@ -1,5 +1,20 @@
 # Validation and SwiftMD integration
 
+## Apple deployment targets: 0.1.1 candidate
+
+The package now declares minimum deployment targets of macOS 10.15, iOS 13,
+tvOS 13, watchOS 6, Mac Catalyst 13.1 and visionOS 1. On macOS 27.3 arm64,
+Xcode 27.2 and Swift 6.4.2, the backend was typechecked at each declared
+minimum, and the full SwiftHTML product built for the iOS, tvOS, watchOS and
+visionOS simulators and for Mac Catalyst. The macOS x86_64 minimum was
+checked using an explicit compiler target. These are cross-build checks, not
+execution on those minimum OS versions or on physical devices.
+
+The Apple CI workflow additionally checks the full package and a normal macOS
+15 consumer on a macOS 15 Intel runner with Xcode 16.4 / Swift 6.1.2. It
+inspects the backend compiler target and builds the remaining Apple platform
+products. Actual hosted run results must be tied to the candidate commit.
+
 ## Executed checks
 
 On 2026-11-19: Apple Silicon arm64, macOS 27.3, Xcode 27.2,

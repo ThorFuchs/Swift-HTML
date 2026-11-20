@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 — 2026-11-20
+
+- Declare explicit Apple deployment targets required by the bundled backend,
+  fixing SwiftPM builds that otherwise compile it for an unsupported OS version.
+- Add macOS Intel and Apple-platform build checks and a macOS 15 consumer check.
+
 ## 0.1.0 — 2026-11-19
 
 - Add document and body-context fragment parsing, CSS selection, text and
