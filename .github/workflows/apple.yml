@@ -44,29 +44,34 @@ jobs:
         run: python3 Scripts/test-versioned-consumer.py "$GITHUB_SHA"
   apple-build:
     name: ${{ matrix.name }} package build
-    runs-on: macos-15-intel
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 35
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: iOS
+            runner: macos-15-intel
             destination: generic/platform=iOS Simulator
             sdk: iphoneos
             triple: arm64-apple-ios13.0
           - name: tvOS
+            runner: macos-15-intel
             destination: generic/platform=tvOS Simulator
             sdk: appletvos
             triple: arm64-apple-tvos13.0
           - name: watchOS
+            runner: macos-15-intel
             destination: generic/platform=watchOS Simulator
             sdk: watchsimulator
             triple: arm64-apple-watchos6.0-simulator
           - name: Mac Catalyst
+            runner: macos-15-intel
             destination: generic/platform=macOS,variant=Mac Catalyst
             sdk: macosx
             triple: x86_64-apple-ios13.1-macabi
           - name: visionOS
+            runner: macos-15
             destination: generic/platform=visionOS Simulator
             sdk: xros
             triple: arm64-apple-xros1.0
