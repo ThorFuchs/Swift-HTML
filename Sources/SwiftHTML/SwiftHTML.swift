@@ -3,10 +3,14 @@ internal import SwiftHTMLBackend
 
 /// An operation failed. Details originate in the parser and are diagnostic, not stable API.
 public enum HTMLFailure: Error, CustomStringConvertible, Sendable {
+    /// The HTML parser could not produce a document.
     case parsing(String)
+    /// The supplied CSS selector could not be evaluated.
     case selector(String)
+    /// An element operation or serialization failed.
     case operation(String)
 
+    /// A diagnostic description that includes the underlying error detail.
     public var description: String {
         switch self {
         case .parsing(let detail): "HTML parsing failed: \(detail)"
@@ -67,6 +71,7 @@ public final class HTMLElement {
         self.owner = owner
     }
 
+    /// The element's HTML tag name.
     public var tagName: String { element.tagName() }
 
     /// The current parent element, or nil if detached. The document root is also
@@ -112,11 +117,13 @@ public final class HTMLElement {
         catch { throw HTMLFailure.operation(String(describing: error)) }
     }
 
+    /// Sets or replaces an attribute on this element.
     public func setAttribute(_ name: String, value: String) throws {
         do { try element.attr(name, value) }
         catch { throw HTMLFailure.operation(String(describing: error)) }
     }
 
+    /// Removes an attribute if present.
     public func removeAttribute(_ name: String) throws {
         do { try element.removeAttr(name) }
         catch { throw HTMLFailure.operation(String(describing: error)) }
@@ -128,6 +135,7 @@ public final class HTMLElement {
         catch { throw HTMLFailure.operation(String(describing: error)) }
     }
 
+    /// Serializes this element and its children as HTML.
     public func outerHTML() throws -> String {
         do { return try element.outerHtml() }
         catch { throw HTMLFailure.operation(String(describing: error)) }
@@ -169,6 +177,7 @@ public final class HTMLElement {
         catch { throw HTMLFailure.operation(String(describing: error)) }
     }
 
+    /// Appends text to this element without interpreting it as HTML markup.
     public func appendText(_ text: String) throws {
         do { try element.appendText(text) }
         catch { throw HTMLFailure.operation(String(describing: error)) }

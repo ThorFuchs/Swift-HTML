@@ -80,6 +80,8 @@ see the validation document for the specific platforms and runtimes tested.
 No SwiftSoup types appear in the public API. See [validation and integration](Documentation/VALIDATION.md)
 and [third-party provenance](Documentation/THIRD_PARTY.md).
 
+API reference and guides are available in the [SwiftHTML documentation](https://thorfuchs.github.io/Swift-HTML/documentation/swifthtml/).
+
 ## License
 
 SwiftHTML's own code is licensed under [Apache 2.0](LICENSE). Its vendored
