@@ -45,7 +45,7 @@ def main():
         (consumer / 'Sources/Consumer').mkdir(parents=True)
         (consumer / 'Package.swift').write_text('''// swift-tools-version: 6.0
 import PackageDescription
-let package = Package(name: "Consumer", dependencies: [
+let package = Package(name: "Consumer", platforms: [.macOS(.v10_15)], dependencies: [
     .package(url: "%s", exact: "%s")
 ], targets: [.executableTarget(name: "Consumer", dependencies: [
     .product(name: "SwiftHTML", package: "Swift-HTML")
