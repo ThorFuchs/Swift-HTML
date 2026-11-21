@@ -33,8 +33,8 @@ final class StructuralDOMTests: XCTestCase {
         let report = try section.node.walk(limits: .init(maximumNodes: 10, maximumDepth: 2)) { node, depth in
             visited.append((node.name, depth))
         }
-        XCTAssertEqual(visited.map(\.0), ["section", "#text", "b", "#text", "#text", "#comment"])
-        XCTAssertEqual(visited.map(\.1), [0, 1, 1, 2, 1, 1])
+        XCTAssertEqual(visited.map { $0.0 }, ["section", "#text", "b", "#text", "#text", "#comment"])
+        XCTAssertEqual(visited.map { $0.1 }, [0, 1, 1, 2, 1, 1])
         XCTAssertEqual(report.visitedNodes, 6)
         XCTAssertEqual(report.maximumDepth, 2)
         XCTAssertEqual(section.node.childCount, 4)
@@ -129,7 +129,7 @@ final class StructuralDOMTests: XCTestCase {
         XCTAssertEqual(span.childCount, 0)
         XCTAssertEqual(try span.children(maximumCount: 0).count, 0)
         XCTAssertNil(span.wholeText)
-        XCTAssertEqual(try span.element?.directText(), "")
+        XCTAssertEqual(span.element?.directText(), "")
         XCTAssertEqual(div.node.child(at: 1)?.commentText, "c")
         XCTAssertEqual(div.node.child(at: 2)?.element?.tagName, "br")
     }

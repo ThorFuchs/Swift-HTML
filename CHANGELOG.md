@@ -6,7 +6,7 @@
 - Add owner-retaining, typed HTMLNode views for document, element, text, comment and data nodes, with indexed children and sibling/parent navigation.
 - Add iterative preorder traversal, explicit postparse node/depth budgets, cancellation checks and a typed completion report.
 - Add structural DOM tests, DocC API guide, updated Linux/Apple CI and a first WASI cross-build/linked consumer gate.
-- The shipped SwiftSoup 2.14.4 source snapshot and upstream provenance remain unchanged; no release or full platform-compatibility claim is made by this changelog entry.
+- The vendored SwiftSoup 2.14.4 tree is unchanged except for an exact, documented WASI-only NSLock shim; verification reverses that shim and checks original upstream hashes. No release or full platform-compatibility claim is made by this entry.
 
 ## 0.1.1 — 2026-11-20
 
