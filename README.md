@@ -4,13 +4,28 @@ SwiftHTML is a small SwiftPM library for parsing, querying, and editing HTML.
 It wraps a fixture-free SwiftSoup 2.14.4 source snapshot in an independent API.
 The library itself has no network or browser runtime dependency.
 
+**Release status:** 0.2.0 is integrated into `main` and passing its
+implementation CI; its **public tag is pending**. The latest published
+immutable release remains **0.1.1** until that tag is created.
+See the [0.2.0 release notes](Documentation/Releases/0.2.0.md) and
+[source-bound qualification](Documentation/Qualification/0.2.0.md).
+
 ## Installation
 
-Add SwiftHTML to your Swift package dependencies:
+Add the published **0.1.1** release today, or switch to **0.2.0
+after its public tag is published**. Do not reference an unpublished
+tag in a consumer that must resolve immediately:
 
 ```swift
+// Published stable line until the 0.2.0 release is available:
 .package(url: "https://github.com/ThorFuchs/Swift-HTML.git", from: "0.1.1")
+
+// After 0.2.0 is published, replace that single line with:
+// .package(url: "https://github.com/ThorFuchs/Swift-HTML.git", from: "0.2.0")
 ```
+
+0.2.0 requires Swift tools 6.4 or later and raises the minimum macOS
+deployment target to 15.0. The old 0.1.1 tag retains its own contract.
 
 Add `.product(name: "SwiftHTML", package: "Swift-HTML")` to your target's
 dependencies, then import `SwiftHTML`.
@@ -35,7 +50,7 @@ its body. These APIs are HTML parsers, not XML parsers or arbitrary
 context-sensitive fragment parsers. Malformed HTML is generally repaired, not
 rejected. Serialization normalizes markup and is not byte-preserving.
 
-## Typed structural DOM (development branch)
+## Typed structural DOM (0.2.0)
 
 A parsed document now exposes live, owner-retaining nodes of distinct kinds:
 elements, decoded text nodes (without whitespace normalization), comments, raw
@@ -65,9 +80,12 @@ cancellation, and rejects node-count/depth overruns; the visitor must not mutate
 the tree. Limits act **after** parsing and do not bound parser peak RAM or CPU.
 
 See [Structural DOM](Sources/SwiftHTML/SwiftHTML.docc/StructuralDOM.md).
-The API is proposed for **0.2.0**, not part of the published 0.1.1 release.
-WASI wasm32-unknown-wasip1 is a new **qualification target** under CI, not a
-supported-runtime assertion until its linked-consumer gate passes.
+The structural API is present in `main` for **0.2.0** and will be
+installable by version once the 0.2.0 tag is published; it is **not
+included in 0.1.1**. On the merged 0.2.0 implementation, Swift 6.4.2 CI
+has compiled, linked and **executed** an external consumer under
+`wasm32-unknown-wasip1` (including structural node traversal). This
+does not establish full WASI XCTest, browser, or universal runtime support.
 
 `select` accepts backend CSS selectors, returns matches in tree order without
 duplicates, and throws `HTMLFailure.selector` for selector errors. Selection on
@@ -106,13 +124,17 @@ it; these are separate operations and do not form a transaction. SwiftHTML does
 not provide byte-preserving SVG insertion. There are no enforced time, memory,
 or document-size limits.
 
-**The development branch requires Swift tools 6.4 and is qualified against Swift 6.4.2.** The public target compiles in Swift 6
-language mode, while the vendored backend compiles in Swift 5 language mode.
-Declared Apple minimums on this development branch are macOS 15, iOS 15,
-tvOS 15, watchOS 9, Mac Catalyst 15 and visionOS 1. Linux is an explicit
-runtime test target; WASI is a separate build/linked-consumer qualification
-target. The stable 0.1.1 release retains its original toolchain and platform contract. These are build targets;
-see the validation document for the specific platforms and runtimes tested.
+**The 0.2.0 source requires Swift tools 6.4 (qualified with Swift 6.4.2).**
+The public module uses Swift 6 language mode; the vendored backend uses
+Swift 5 language mode **under the same modern compiler**. Declared Apple
+minimums: **macOS 15, iOS 15, tvOS 15, watchOS 9, Mac Catalyst 15
+and visionOS 1**. macOS 15 Intel and Linux x86_64 have native runtime
+test evidence. WebAssembly WASI has a real consumer execution gate;
+the complete unit suite has not run on WASI. Other Apple platform
+minimums are declarations, **not CI-verified 0.2.0 simulator/device
+support**: the conditional Xcode 27 cross-build job was skipped.
+The stable 0.1.1 tag retains its earlier compiler and platform requirements.
+Consult the [qualification record](Documentation/Qualification/0.2.0.md).
 No SwiftSoup types appear in the public API. See [validation and integration](Documentation/VALIDATION.md)
 and [third-party provenance](Documentation/THIRD_PARTY.md).
 
