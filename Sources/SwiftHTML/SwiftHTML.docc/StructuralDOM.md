@@ -89,7 +89,7 @@ WASI build, linking **and executed consumer** succeeded on the merged
 or by a full WASI XCTest run. The optional Xcode 27 cross-build matrix
 for iOS/tvOS/watchOS/Catalyst/visionOS was skipped, so qualification for
 those declared Apple targets remains open. See the
-[qualification matrix](../../../../Documentation/Qualification/0.2.0.md).
+[qualification matrix](https://github.com/ThorFuchs/Swift-HTML/blob/main/Documentation/Qualification/0.2.0.md).
 
 ## Migration from SwiftHTML 0.1.1
 

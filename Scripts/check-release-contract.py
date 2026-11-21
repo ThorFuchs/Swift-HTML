@@ -34,6 +34,7 @@ def main() -> None:
     require("Documentation/VALIDATION.md", "Current release line: SwiftHTML 0.2.0", "historical")
     require("Documentation/THIRD_PARTY.md", "WASI", "NSLock", "MIT")
     require("Documentation/Releases/0.2.0.md", "0.2.0", "macOS 15", "Linux", "WASI", "MIT")
+    require("Documentation/Releases/0.2.0-PUBLISHING.md", "0.2.0", "SHA", "tag", "Research Explorer")
     require("Documentation/Qualification/0.2.0.md",
             "8a1d75b206d87538dda2be304365e5a50bf0bf31",
             "44916317312", "44916317402", "44916317296", "44916317332")

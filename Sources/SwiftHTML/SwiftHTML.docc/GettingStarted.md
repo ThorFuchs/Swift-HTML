@@ -19,7 +19,7 @@ structural DOM and Swift 6.4 can instead use:
 
 The source in `main` is a 0.2.0 release candidate; an uncreated tag cannot
 resolve through ordinary SwiftPM version selection. See the
-[0.2.0 release notes](../../../../Documentation/Releases/0.2.0.md).
+[0.2.0 release notes](https://github.com/ThorFuchs/Swift-HTML/blob/main/Documentation/Releases/0.2.0.md).
 
 ```swift
 .product(name: "SwiftHTML", package: "Swift-HTML")
@@ -32,7 +32,7 @@ native test/consumer proof; WASI has executed a compiled public consumer.
 The Xcode 27 simulator build matrix for other Apple platforms was skipped,
 so these minimums are declarations, not full 0.2.0 runtime qualification.
 0.1.1 retains its earlier compiler and platform contract.
-See [Qualification 0.2.0](../../../../Documentation/Qualification/0.2.0.md).
+See [Qualification 0.2.0](https://github.com/ThorFuchs/Swift-HTML/blob/main/Documentation/Qualification/0.2.0.md).
 
 ## Parse and select
 
