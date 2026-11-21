@@ -1,8 +1,9 @@
 # Structural DOM: nodes and finite traversals
 
 This guide describes the structural DOM introduced in **SwiftHTML 0.2.0**.
-The current public `0.1.1` tag does not include this API; the versioned
-`0.2.0` source becomes installable once its release tag is published.
+The earlier `0.1.1` tag does not include this API. The public
+[`0.2.0` release](https://github.com/ThorFuchs/Swift-HTML/releases/tag/0.2.0)
+provides it through normal SwiftPM version resolution.
 
 Use live node references to inspect an HTML document in parsed order, including
 mixed text, element, comment and data nodes. The public interface does not

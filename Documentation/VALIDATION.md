@@ -2,9 +2,12 @@
 
 ## Current release line: SwiftHTML 0.2.0 (2026-11-21)
 
-The implementation for 0.2.0 is merged on `main` at
-[`8a1d75b206d87538dda2be304365e5a50bf0bf31`](https://github.com/ThorFuchs/Swift-HTML/commit/8a1d75b206d87538dda2be304365e5a50bf0bf31).
-At the time of this record the public `0.2.0` tag is **not yet published**.
+**SwiftHTML 0.2.0 is published** as a stable
+[GitHub Release](https://github.com/ThorFuchs/Swift-HTML/releases/tag/0.2.0).
+The immutable public tag points to
+[`9e5922e19fb45d3c97c72a57cca58adb2f799c78`](https://github.com/ThorFuchs/Swift-HTML/commit/9e5922e19fb45d3c97c72a57cca58adb2f799c78),
+which includes implementation baseline `8a1d75b2` and the merged
+release-documentation PR #3.
 
 The **current**, source-bound evidence is maintained in
 [Qualification 0.2.0](Qualification/0.2.0.md) and
@@ -31,8 +34,14 @@ This edition requires Swift tools 6.4 and macOS 15+, unlike the earlier
 0.1.1 line. The backend is the pinned SwiftSoup 2.14.4 source-only inventory
 plus documented module namespacing and a reversible WASI lock shim.
 
-The release-documentation change itself requires a fresh exact-SHA CI result
-after merge before any 0.2.0 tag is issued.
+All four post-merge `main` workflows passed on the exact published tag SHA:
+[macOS](https://github.com/ThorFuchs/Swift-HTML/actions/runs/44926283244),
+[Linux](https://github.com/ThorFuchs/Swift-HTML/actions/runs/44926283151),
+[WASI](https://github.com/ThorFuchs/Swift-HTML/actions/runs/44926283233),
+and [DocC](https://github.com/ThorFuchs/Swift-HTML/actions/runs/44926283145).
+A separate post-publication public SwiftPM consumer qualification is tracked
+by [its workflow](https://github.com/ThorFuchs/Swift-HTML/actions/workflows/public-release-consumer.yml);
+its result is not inferred from the earlier synthetic local-tag test.
 
 ---
 

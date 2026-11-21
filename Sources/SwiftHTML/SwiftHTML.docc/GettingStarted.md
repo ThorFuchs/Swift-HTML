@@ -4,22 +4,16 @@ Add SwiftHTML to a Swift package and parse your first fragment.
 
 ## Add the dependency
 
-For the latest **published** 0.1.1 release, the package is:
-
-```swift
-.package(url: "https://github.com/ThorFuchs/Swift-HTML.git", from: "0.1.1")
-```
-
-**Once the public 0.2.0 tag has been published**, consumers requiring
-structural DOM and Swift 6.4 can instead use:
+Use the **published SwiftHTML 0.2.0** package:
 
 ```swift
 .package(url: "https://github.com/ThorFuchs/Swift-HTML.git", from: "0.2.0")
 ```
 
-The source in `main` is a 0.2.0 release candidate; an uncreated tag cannot
-resolve through ordinary SwiftPM version selection. See the
-[0.2.0 release notes](https://github.com/ThorFuchs/Swift-HTML/blob/main/Documentation/Releases/0.2.0.md).
+For an exact version pin, use `exact: "0.2.0"`. Applications that
+must remain on Swift 6.0 and the earlier deployment minimums can use
+`exact: "0.1.1"` instead. See the
+[0.2.0 release notes](https://github.com/ThorFuchs/Swift-HTML/blob/0.2.0/Documentation/Releases/0.2.0.md).
 
 ```swift
 .product(name: "SwiftHTML", package: "Swift-HTML")

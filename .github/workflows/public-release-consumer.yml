@@ -1,0 +1,49 @@
+# SPDX-License-Identifier: Apache-2.0
+name: Public SwiftPM release 0.2.0
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/public-release-consumer.yml'
+      - 'Scripts/test-public-release-consumer.py'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - 'Documentation/**'
+      - 'Sources/SwiftHTML/SwiftHTML.docc/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/public-release-consumer.yml'
+      - 'Scripts/test-public-release-consumer.py'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - 'Documentation/**'
+      - 'Sources/SwiftHTML/SwiftHTML.docc/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-swifthtml-0.2.0-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  public-consumer:
+    name: Public 0.2.0 / Swift 6.4.2 / Linux
+    runs-on: ubuntu-24.04
+    container:
+      image: swift@sha256:23d9b28ad97fb1cf1999edc3a0cb265ee915ed42299a9344e7173d5a6d2b05f4
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Verify toolchain and install Python
+        run: |
+          swift --version | tee /tmp/swifthtml-public-swift-version.txt
+          grep -F 'Swift version 6.4.2' /tmp/swifthtml-public-swift-version.txt
+          apt-get update -qq
+          apt-get install -y --no-install-recommends python3
+      - name: Resolve real public 0.2.0 tag and run external consumer
+        run: python3 Scripts/test-public-release-consumer.py
