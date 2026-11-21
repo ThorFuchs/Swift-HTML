@@ -29,7 +29,7 @@ underlying strings are diagnostic details, not a stable error-message API.
 
 ## Structural DOM and isolation
 
-In the unreleased 0.2.0 development API, live `HTMLNode` views retain the same
+Introduced in 0.2.0, live `HTMLNode` views retain the same
 mutable document as `HTMLElement` and are equally non-Sendable. The bounded
 `walk(limits:_:)` callback must not mutate the document: even if child-count
 changes are detected, equally sized reorderings and text edits cannot be

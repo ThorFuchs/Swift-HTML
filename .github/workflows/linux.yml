@@ -38,6 +38,8 @@ jobs:
         run: |
           python3 Scripts/verify-upstream.py
           python3 Scripts/verify-notices.py
+      - name: Check release version and documentation consistency
+        run: python3 Scripts/check-release-contract.py
       - name: Test debug configuration
         run: swift test -j 4
       - name: Build optimized library

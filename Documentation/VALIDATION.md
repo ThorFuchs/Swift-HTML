@@ -1,4 +1,47 @@
-# Validation and SwiftMD integration
+# Validation, qualification and historical integration records
+
+## Current release line: SwiftHTML 0.2.0 (2026-11-21)
+
+The implementation for 0.2.0 is merged on `main` at
+[`8a1d75b206d87538dda2be304365e5a50bf0bf31`](https://github.com/ThorFuchs/Swift-HTML/commit/8a1d75b206d87538dda2be304365e5a50bf0bf31).
+At the time of this record the public `0.2.0` tag is **not yet published**.
+
+The **current**, source-bound evidence is maintained in
+[Qualification 0.2.0](Qualification/0.2.0.md) and
+[Release Notes 0.2.0](Releases/0.2.0.md), rather than in the original
+0.1.x narrative below. The evidence includes:
+
+- [macOS 15 Intel / Swift 6.4.2: successful](https://github.com/ThorFuchs/Swift-HTML/actions/runs/44916317402):
+  native **22 tests**, optimized build, an executed macOS 15 consumer,
+  versioned local consumer and MIT-resource verification.
+- [Linux x86_64 / Swift 6.4.2: successful](https://github.com/ThorFuchs/Swift-HTML/actions/runs/44916317312):
+  **22 debug and 22 optimized tests**, release build and consumers,
+  source/notice verifiers.
+- [WebAssembly WASI: successful](https://github.com/ThorFuchs/Swift-HTML/actions/runs/44916317296):
+  source build, linked public consumer and **real execution** using the
+  Swift 6.4.2 WASI SDK, including typed DOM traversal.
+- [DocC: successful](https://github.com/ThorFuchs/Swift-HTML/actions/runs/44916317332):
+  warnings-as-errors symbol graph/doc build and published GitHub Pages.
+
+**Scope boundaries:** macOS 15 Intel runtime is qualified; iOS, tvOS, watchOS,
+Mac Catalyst and visionOS deployment minimums are declared but their optional
+Xcode 27 simulator cross-builds were **skipped**, not successful. WASI has an
+executed consumer smoke, **not** a full WASI XCTest suite or browser profile.
+This edition requires Swift tools 6.4 and macOS 15+, unlike the earlier
+0.1.1 line. The backend is the pinned SwiftSoup 2.14.4 source-only inventory
+plus documented module namespacing and a reversible WASI lock shim.
+
+The release-documentation change itself requires a fresh exact-SHA CI result
+after merge before any 0.2.0 tag is issued.
+
+---
+
+## Archived records below — 0.1.x qualification and historical SwiftMD assessment
+
+The following sections are preserved for traceability. They describe
+**the older 0.1.0/0.1.1 candidates and historical SwiftMD status**, not
+the current 0.2.0 requirements or the latest Swift-MD integration. Older
+test counts and OS minima must not be copied into a 0.2.0 release claim.
 
 ## Apple deployment targets: 0.1.1 candidate
 
