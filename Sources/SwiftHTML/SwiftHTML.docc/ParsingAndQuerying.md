@@ -32,3 +32,6 @@ have already been decoded and HTML input processing may normalize line endings.
 ``HTMLElement/attribute(_:)`` distinguishes a missing attribute (`nil`) from
 an attribute whose value is empty (`""`). ``HTMLElement/parent`` follows the
 current tree and is `nil` for a detached element.
+
+For ordered mixed text/element/comment/data nodes rather than CSS-only element
+selection, use the owner-retaining structural API described in <doc:StructuralDOM>.
