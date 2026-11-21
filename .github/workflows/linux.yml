@@ -9,11 +9,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: swifthtml-${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   swiftpm:
-    name: Swift 6.2.4 on Linux
+    name: Swift 6.4.2 on Linux
     runs-on: ubuntu-24.04
-    container: swift@sha256:3459518b2e723a7c363d0f8cfa44fc796c77ecd8c18e92fd10e6f92dd78c0b12 # 6.2.4, multi-architecture manifest
+    container: swift@sha256:23d9b28ad97fb1cf1999edc3a0cb265ee915ed42299a9344e7173d5a6d2b05f4 # Swift 6.4.2 noble; same digest as DocC/WASI
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -24,7 +28,8 @@ jobs:
         run: |
           cat /etc/os-release
           uname -sm
-          swift --version
+          swift --version | tee /tmp/swifthtml-swift-version.txt
+          grep -F 'Swift version 6.4.2' /tmp/swifthtml-swift-version.txt
       - name: Install Python for the provenance check
         run: |
           apt-get update -qq
@@ -36,10 +41,10 @@ jobs:
       - name: Test debug configuration
         run: swift test -j 4
       - name: Build optimized library
-        run: swift build -c release -j 4 -Xswiftc -no-whole-module-optimization
+        run: swift build -c release -j 2
       - name: Test optimized configuration
-        run: swift test -c release -j 4 -Xswiftc -no-whole-module-optimization
+        run: swift test -c release -j 2
       - name: Run release consumer
-        run: swift run --package-path Examples/Consumer -c release -j 4 -Xswiftc -no-whole-module-optimization
+        run: swift run --package-path Examples/Consumer -c release -j 2
       - name: Verify a local versioned consumer and bundled notices
         run: python3 Scripts/test-versioned-consumer.py "$GITHUB_SHA"

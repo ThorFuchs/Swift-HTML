@@ -14,6 +14,11 @@
         "Sources/Token.swift": 7,
         "Sources/XmlTreeBuilder.swift": 2
       }
+    },
+    {
+      "description": "Insert an audited WASI-only NSLock platform branch before the upstream FreeBSD branch; verify-upstream.py reverses this exact insert before checking the original SHA-256.",
+      "file": "Sources/Mutex.swift",
+      "insert_before": "#elseif os(FreeBSD)"
     }
   ],
   "files_sha256": {

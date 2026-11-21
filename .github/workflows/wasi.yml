@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: Apache-2.0
+name: WebAssembly WASI qualification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: swifthtml-${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build-wasip1:
+    name: Swift 6.4.2 / wasm32-unknown-wasip1
+    runs-on: ubuntu-24.04
+    container:
+      image: swift@sha256:23d9b28ad97fb1cf1999edc3a0cb265ee915ed42299a9344e7173d5a6d2b05f4
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Verify Swift 6.4.2 toolchain
+        run: |
+          swift --version | tee /tmp/swifthtml-swift-version.txt
+          grep -F 'Swift version 6.4.2' /tmp/swifthtml-swift-version.txt
+      - name: Install matching official Swift WebAssembly SDK
+        run: |
+          swift sdk install \
+            https://download.swift.org/swift-6.4.2-release/wasm-sdk/swift-6.4.2-RELEASE/swift-6.4.2-RELEASE_wasm.artifactbundle.tar.gz \
+            --checksum 83baca83553f8c443cda7b84800912e6e709c3acd2e7ebf277794ca5836c0da5
+          swift sdk list
+      - name: Compile SwiftHTML for WASI
+        run: swift build --swift-sdk swift-6.4.2-RELEASE_wasm -j 2
+      - name: Link the ordinary public consumer as WebAssembly
+        run: swift build --package-path Examples/Consumer --swift-sdk swift-6.4.2-RELEASE_wasm -j 2
+      - name: Execute public WASI consumer in Swift toolchain runtime
+        run: swift run --package-path Examples/Consumer --swift-sdk swift-6.4.2-RELEASE_wasm -j 2 Consumer

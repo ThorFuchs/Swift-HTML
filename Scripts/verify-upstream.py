@@ -14,15 +14,37 @@ REVISION = '8397a860c6955924b584c50c5265c6aac0970015'
 TREE = 'f8472ba94c5dd20e84cc531ff046e7ad1029cdfa'
 
 
+WASI_SHIM = b"""#elseif os(WASI)
+    // WASI preview 1 does not expose the pthread_mutex_* C API.
+    // Keep a real Foundation locking primitive instead of a no-op lock;
+    // this small, documented platform shim is reversed by verify-upstream.py.
+    private let backingLock = NSLock()
+
+    func lock() {
+        backingLock.lock()
+    }
+
+    func unlock() {
+        backingLock.unlock()
+    }
+
+"""
+
 def verify(reference):
     info = json.loads((VENDOR / 'UPSTREAM.json').read_text(encoding='utf-8'))
     if (info.get('repository'), info.get('tag'), info.get('commit'), info.get('sources_tree'),
-            info.get('transformations')) != ('https://github.com/scinfu/SwiftSoup.git',
+            info.get('transformations', [])[:1]) != ('https://github.com/scinfu/SwiftSoup.git',
                                              '2.14.4', REVISION, TREE, [{
                                                  'description': 'Replace module qualification SwiftSoup. with SwiftHTMLBackend. for isolated target',
                                                  'files_and_counts': {'Sources/Attributes.swift': 8, 'Sources/Token.swift': 7, 'Sources/XmlTreeBuilder.swift': 2, 'Sources/SwiftSoup.swift': 3}
                                              }]):
         raise ValueError('unexpected upstream identity or modifications')
+    if info.get('transformations', [])[1:] != [{
+            'description': 'Insert an audited WASI-only NSLock platform branch before the upstream FreeBSD branch; verify-upstream.py reverses this exact insert before checking the original SHA-256.',
+            'file': 'Sources/Mutex.swift',
+            'insert_before': '#elseif os(FreeBSD)'
+        }]:
+        raise ValueError('unexpected WASI transformation provenance')
     expected = info['files_sha256']
     if len(expected) != 64 or 'LICENSE' not in expected:
         raise ValueError('unexpected source inventory')
@@ -45,6 +67,10 @@ def verify(reference):
         if path.is_absolute() or '..' in path.parts or not (name == 'LICENSE' or name.startswith('Sources/')):
             raise ValueError(f'forbidden path: {name}')
         data = (VENDOR / path).read_bytes()
+        if name == 'Sources/Mutex.swift':
+            if data.count(WASI_SHIM) != 1:
+                raise ValueError('WASI shim is missing, duplicated or modified')
+            data = data.replace(WASI_SHIM, b'', 1)
         counts = info['transformations'][0]['files_and_counts']
         if name in counts:
             if data.count(b'SwiftHTMLBackend.') != counts[name] or b'SwiftSoup.' in data:
@@ -54,7 +80,7 @@ def verify(reference):
             raise ValueError(f'checksum mismatch: {name}')
         if reference and git('show', REVISION + ':' + name) != data:
             raise ValueError(f'upstream bytes differ: {name}')
-    print(f'SwiftSoup {info["tag"]}: {len(expected)} upstream files verified after reversing documented module renaming; '
+    print(f'SwiftSoup {info["tag"]}: {len(expected)} upstream files verified after reversing documented module renaming and WASI lock shim; '
           f'independent Git comparison: {bool(reference)}; no upstream test fixtures')
 
 

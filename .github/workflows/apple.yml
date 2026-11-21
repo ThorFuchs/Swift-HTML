@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-name: Apple platforms
+name: Apple platforms (Swift 6.4)
 
 on:
   push:
@@ -9,81 +9,79 @@ on:
 permissions:
   contents: read
 
-env:
-  DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+concurrency:
+  group: swifthtml-${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
-  macos-consumer:
-    name: macOS Intel / Swift 6.1.2 consumer
+  macos-15-consumer:
+    name: macOS 15 Intel / Swift 6.4.2
     runs-on: macos-15-intel
-    timeout-minutes: 35
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Verify runner and compiler
+      # Verified swift.org toolchain installer, pinned to an immutable action commit.
+      - uses: tryswift/setup-swift@ce5fe39afee72fd792fabab6db8ec3005962daf7 # v1
+        with:
+          swift-version: '6.4.2'
+      - name: Verify host and compiler
         run: |
           test "$(uname -m)" = x86_64
+          swift --version | tee "$RUNNER_TEMP/swift-version.txt"
+          grep -F 'Swift version 6.4.2' "$RUNNER_TEMP/swift-version.txt"
           xcodebuild -version
-          swift --version | tee /tmp/swifthtml-swift-version.txt
-          grep -F 'Apple Swift version 6.1.2' /tmp/swifthtml-swift-version.txt
-      - name: Test package
+      - name: Typecheck vendored backend at macOS 15 deployment target
         run: |
-          xcrun swiftc -typecheck -swift-version 5 -module-name SwiftHTMLBackend \
-            -target x86_64-apple-macosx10.15 -sdk "$(xcrun --sdk macosx --show-sdk-path)" \
+          swiftc -typecheck -swift-version 5 -module-name SwiftHTMLBackend \
+            -target x86_64-apple-macosx15.0 -sdk "$(xcrun --sdk macosx --show-sdk-path)" \
             Vendor/SwiftSoup/Sources/*.swift
+      - name: Test and optimized-build SwiftHTML
+        run: |
           swift test -j 4
           swift build -c release -j 4
       - name: Build and run ordinary macOS 15 consumer
         run: |
-          swift build --package-path Examples/DeploymentConsumer -v -j 4 2>&1 | tee /tmp/swifthtml-consumer-build.log
-          python3 Scripts/check-deployment-build.py /tmp/swifthtml-consumer-build.log
+          swift build --package-path Examples/DeploymentConsumer -v -j 4 2>&1 | tee "$RUNNER_TEMP/swifthtml-consumer-build.log"
+          python3 Scripts/check-deployment-build.py "$RUNNER_TEMP/swifthtml-consumer-build.log"
           swift run --package-path Examples/DeploymentConsumer DeploymentConsumer
-      - name: Test exact revision as a versioned consumer
+      - name: Verify versioned consumer and bundled MIT notices
         run: python3 Scripts/test-versioned-consumer.py "$GITHUB_SHA"
-  apple-build:
-    name: ${{ matrix.name }} package build
-    runs-on: ${{ matrix.runner }}
-    timeout-minutes: 35
+
+  apple-cross-build:
+    # Xcode 27's SDKs require a newer macOS host. Do not run Xcode 16.4 /
+    # Swift 6.1 against a swift-tools-version: 6.4 manifest.
+    if: >-
+      vars.HAS_MACOS27_RUNNER == 'true' &&
+      (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    name: ${{ matrix.name }} / Xcode 27
+    runs-on: [self-hosted, macOS, macos-27]
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: iOS
-            runner: macos-15-intel
             destination: generic/platform=iOS Simulator
-            sdk: iphoneos
-            triple: arm64-apple-ios13.0
           - name: tvOS
-            runner: macos-15-intel
             destination: generic/platform=tvOS Simulator
-            sdk: appletvos
-            triple: arm64-apple-tvos13.0
           - name: watchOS
-            runner: macos-15-intel
             destination: generic/platform=watchOS Simulator
-            sdk: watchsimulator
-            triple: arm64-apple-watchos6.0-simulator
           - name: Mac Catalyst
-            runner: macos-15-intel
             destination: generic/platform=macOS,variant=Mac Catalyst
-            sdk: macosx
-            triple: x86_64-apple-ios13.1-macabi
           - name: visionOS
-            runner: macos-15
             destination: generic/platform=visionOS Simulator
-            sdk: xros
-            triple: arm64-apple-xros1.0
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - name: Check backend at declared minimum
+      - name: Verify Xcode 27 / Swift 6.4.2
         run: |
-          xcrun swiftc -typecheck -swift-version 5 -module-name SwiftHTMLBackend \
-            -target '${{ matrix.triple }}' -sdk "$(xcrun --sdk '${{ matrix.sdk }}' --show-sdk-path)" \
-            Vendor/SwiftSoup/Sources/*.swift
+          xcodebuild -version
+          swift --version | tee "$RUNNER_TEMP/swift-version.txt"
+          grep -F 'Apple Swift version 6.4.2' "$RUNNER_TEMP/swift-version.txt"
       - name: Build complete SwiftHTML product
         run: |
           xcodebuild -scheme SwiftHTML -destination '${{ matrix.destination }}' \

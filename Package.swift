@@ -1,12 +1,12 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.4
 // SPDX-License-Identifier: Apache-2.0
 import PackageDescription
 
 let package = Package(
     name: "SwiftHTML",
     platforms: [
-        .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6),
-        .macCatalyst("13.1"), .visionOS(.v1)
+        .macOS(.v15), .iOS(.v15), .tvOS(.v15), .watchOS(.v9),
+        .macCatalyst("15.0"), .visionOS(.v1)
     ],
     products: [.library(name: "SwiftHTML", targets: ["SwiftHTML"])],
     targets: [
