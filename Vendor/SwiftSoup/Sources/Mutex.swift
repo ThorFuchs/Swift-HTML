@@ -55,6 +55,20 @@ final class Mutex: NSLocking, @unchecked Sendable {
     func unlock() {
         LeaveCriticalSection(&mutex)
     }
+#elseif os(WASI)
+    // WASI preview 1 does not expose the pthread_mutex_* C API.
+    // Keep a real Foundation locking primitive instead of a no-op lock;
+    // this small, documented platform shim is reversed by verify-upstream.py.
+    private let backingLock = NSLock()
+
+    func lock() {
+        backingLock.lock()
+    }
+
+    func unlock() {
+        backingLock.unlock()
+    }
+
 #elseif os(FreeBSD)
     private var mutex:  pthread_mutex_t? = nil
 
