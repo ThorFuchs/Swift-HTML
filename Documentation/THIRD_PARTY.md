@@ -15,7 +15,14 @@ Only upstream `Sources` and `LICENSE` are included, not upstream tests or their
 third-party webpage fixtures. `UPSTREAM.json` contains original hashes. Four
 Swift files have the upstream module qualification `SwiftSoup.` replaced with
 `SwiftHTMLBackend.` to allow an independently supplied SwiftSoup to coexist.
-This includes occurrences in comments. No other upstream bytes are changed.
+This includes occurrences in comments. A separate, exact **WASI-only**
+conditional branch in `Vendor/SwiftSoup/Sources/Mutex.swift` uses
+`Foundation.NSLock` because WASI preview 1 does not expose the pthread mutex C
+API. `UPSTREAM.json` describes this porting shim; the verifier removes its
+exact contents before comparing the pinned upstream SHA-256 and optional Git
+checkout. No other upstream bytes are changed. The WASI shim is **not** an
+upstream SwiftSoup modification or a claim of complete WebAssembly runtime
+qualification.
 
 ```sh
 python3 Scripts/verify-upstream.py
