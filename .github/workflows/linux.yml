@@ -13,7 +13,7 @@ jobs:
   swiftpm:
     name: Swift 6.4.2 on Linux
     runs-on: ubuntu-24.04
-    container: swift@sha256:3459518b2e723a7c363d0f8cfa44fc796c77ecd8c18e92fd10e6f92dd78c0b12 # 6.2.4, multi-architecture manifest
+    container: swift@sha256:23d9b28ad97fb1cf1999edc3a0cb265ee915ed42299a9344e7173d5a6d2b05f4 # Swift 6.4.2 noble; same digest as DocC/WASI
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
