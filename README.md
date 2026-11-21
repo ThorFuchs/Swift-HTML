@@ -4,25 +4,24 @@ SwiftHTML is a small SwiftPM library for parsing, querying, and editing HTML.
 It wraps a fixture-free SwiftSoup 2.14.4 source snapshot in an independent API.
 The library itself has no network or browser runtime dependency.
 
-**Release status:** 0.2.0 is integrated into `main` and passing its
-implementation CI; its **public tag is pending**. The latest published
-immutable release remains **0.1.1** until that tag is created.
+**Current stable release: [SwiftHTML 0.2.0](https://github.com/ThorFuchs/Swift-HTML/releases/tag/0.2.0)**,
+published on 2026-11-21 from the verified commit
+[`9e5922e1`](https://github.com/ThorFuchs/Swift-HTML/commit/9e5922e19fb45d3c97c72a57cca58adb2f799c78).
 See the [0.2.0 release notes](Documentation/Releases/0.2.0.md) and
 [source-bound qualification](Documentation/Qualification/0.2.0.md).
 
 ## Installation
 
-Add the published **0.1.1** release today, or switch to **0.2.0
-after its public tag is published**. Do not reference an unpublished
-tag in a consumer that must resolve immediately:
+Add the **published 0.2.0 release** to your Swift package:
 
 ```swift
-// Published stable line until the 0.2.0 release is available:
-.package(url: "https://github.com/ThorFuchs/Swift-HTML.git", from: "0.1.1")
-
-// After 0.2.0 is published, replace that single line with:
-// .package(url: "https://github.com/ThorFuchs/Swift-HTML.git", from: "0.2.0")
+.package(url: "https://github.com/ThorFuchs/Swift-HTML.git", from: "0.2.0")
 ```
+
+For a reproducible release-specific dependency, use `exact: "0.2.0"`.
+Legacy consumers that must remain on the Swift 6.0/macOS 10.15
+compatibility line should pin `exact: "0.1.1"` rather than allowing
+a resolver to select a newer incompatible release.
 
 0.2.0 requires Swift tools 6.4 or later and raises the minimum macOS
 deployment target to 15.0. The old 0.1.1 tag retains its own contract.
@@ -80,9 +79,8 @@ cancellation, and rejects node-count/depth overruns; the visitor must not mutate
 the tree. Limits act **after** parsing and do not bound parser peak RAM or CPU.
 
 See [Structural DOM](Sources/SwiftHTML/SwiftHTML.docc/StructuralDOM.md).
-The structural API is present in `main` for **0.2.0** and will be
-installable by version once the 0.2.0 tag is published; it is **not
-included in 0.1.1**. On the merged 0.2.0 implementation, Swift 6.4.2 CI
+The structural API is **published in 0.2.0** and is not included in
+0.1.1. On the released 0.2.0 source, Swift 6.4.2 CI
 has compiled, linked and **executed** an external consumer under
 `wasm32-unknown-wasip1` (including structural node traversal). This
 does not establish full WASI XCTest, browser, or universal runtime support.
