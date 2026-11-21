@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   swiftpm:
-    name: Swift 6.2.4 on Linux
+    name: Swift 6.4.2 on Linux
     runs-on: ubuntu-24.04
     container: swift@sha256:3459518b2e723a7c363d0f8cfa44fc796c77ecd8c18e92fd10e6f92dd78c0b12 # 6.2.4, multi-architecture manifest
     timeout-minutes: 45
@@ -24,7 +24,8 @@ jobs:
         run: |
           cat /etc/os-release
           uname -sm
-          swift --version
+          swift --version | tee /tmp/swifthtml-swift-version.txt
+          grep -F 'Swift version 6.4.2' /tmp/swifthtml-swift-version.txt
       - name: Install Python for the provenance check
         run: |
           apt-get update -qq
