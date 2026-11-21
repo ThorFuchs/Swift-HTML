@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0 — in development (unreleased)
+
+- Raise Swift tools requirement to 6.4 (CI baseline 6.4.2), with macOS 15 as the deployment floor; align other Apple platform floors with supported Xcode 27 targets.
+- Add owner-retaining, typed HTMLNode views for document, element, text, comment and data nodes, with indexed children and sibling/parent navigation.
+- Add iterative preorder traversal, explicit postparse node/depth budgets, cancellation checks and a typed completion report.
+- Add structural DOM tests, DocC API guide, updated Linux/Apple CI and a first WASI cross-build/linked consumer gate.
+- The shipped SwiftSoup 2.14.4 source snapshot and upstream provenance remain unchanged; no release or full platform-compatibility claim is made by this changelog entry.
+
 ## 0.1.1 — 2026-11-20
 
 - Declare explicit Apple deployment targets required by the bundled backend,
