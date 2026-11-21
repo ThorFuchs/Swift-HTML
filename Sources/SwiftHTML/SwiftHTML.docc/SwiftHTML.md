@@ -1,13 +1,21 @@
 # ``SwiftHTML``
 
-Parse, query, and edit HTML with a small Swift API.
+Parse, query, traverse and edit HTML through a small, typed Swift API.
 
 ## Overview
 
-SwiftHTML wraps a vendored SwiftSoup backend behind document and element types.
-Parse an HTML document or a body-context fragment, use CSS selectors to find
-elements, edit their shared tree, and serialize the result. No browser or
-network runtime is required.
+SwiftHTML wraps the fixture-free, source-audited SwiftSoup 2.14.4 backend
+behind document, element and **typed node** interfaces. Parse full documents
+or body-context fragments, find elements using CSS selectors, traverse mixed
+text/element/comment/data nodes in original parsed order with finite
+**postparse traversal limits**, edit a shared DOM and serialize the result.
+No browser or network runtime is required.
+
+**SwiftHTML 0.2.0** requires Swift tools 6.4 or newer; the public wrapper uses
+Swift 6 language mode. Mutable DOM references are intentionally **not
+Sendable**. The compiler can run on macOS 15+, Linux and WASI in the
+qualified profiles described by the project. Other Apple platform minimums
+are declared, but the 0.2.0 Xcode 27 cross-build matrix was not executed.
 
 ```swift
 import SwiftHTML
