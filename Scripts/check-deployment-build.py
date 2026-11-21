@@ -15,6 +15,6 @@ for command in commands:
     if not targets:
         raise SystemExit('SwiftHTMLBackend compiler command has no Intel macOS target')
     target, major, minor = targets[-1]
-    if not ((10, 15) <= (int(major), int(minor)) <= (15, 0)):
+    if not ((int(major), int(minor)) == (15, 0)):
         raise SystemExit(f'Unexpected SwiftHTMLBackend deployment target: {target}')
     print(f'SwiftHTMLBackend compiler target verified: {target}')
