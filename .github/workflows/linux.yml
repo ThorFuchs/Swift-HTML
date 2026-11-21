@@ -41,10 +41,10 @@ jobs:
       - name: Test debug configuration
         run: swift test -j 4
       - name: Build optimized library
-        run: swift build -c release -j 4 -Xswiftc -no-whole-module-optimization
+        run: swift build -c release -j 2
       - name: Test optimized configuration
-        run: swift test -c release -j 4 -Xswiftc -no-whole-module-optimization
+        run: swift test -c release -j 2
       - name: Run release consumer
-        run: swift run --package-path Examples/Consumer -c release -j 4 -Xswiftc -no-whole-module-optimization
+        run: swift run --package-path Examples/Consumer -c release -j 2
       - name: Verify a local versioned consumer and bundled notices
         run: python3 Scripts/test-versioned-consumer.py "$GITHUB_SHA"
