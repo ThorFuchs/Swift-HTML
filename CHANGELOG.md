@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 — 2026-11-21 (release candidate; public tag pending)
+## 0.2.0 — 2026-11-21 (published)
 
 - Raise Swift tools requirement to 6.4 (CI baseline 6.4.2), with macOS 15 as the deployment floor; align other Apple platform floors with supported Xcode 27 targets.
 - Add owner-retaining, typed HTMLNode views for document, element, text, comment and data nodes, with indexed children and sibling/parent navigation.
