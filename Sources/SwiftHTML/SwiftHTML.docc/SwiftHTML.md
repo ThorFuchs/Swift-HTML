@@ -29,6 +29,7 @@ See <doc:SafetyAndOwnership> before working with untrusted content.
 
 - <doc:GettingStarted>
 - <doc:ParsingAndQuerying>
+- <doc:StructuralDOM>
 - <doc:EditingHTML>
 - <doc:SafetyAndOwnership>
 
@@ -36,4 +37,9 @@ See <doc:SafetyAndOwnership> before working with untrusted content.
 
 - ``HTMLDocument``
 - ``HTMLElement``
+- ``HTMLNode``
+- ``HTMLNodeKind``
+- ``HTMLTraversalLimits``
+- ``HTMLTraversalReport``
+- ``HTMLTraversalError``
 - ``HTMLFailure``
