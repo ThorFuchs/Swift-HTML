@@ -26,9 +26,11 @@ def main() -> None:
     require(
         "README.md", "Typed structural DOM (0.2.0)", "Swift tools 6.4", "WASI",
         "Documentation/Releases/0.2.0.md", "Documentation/Qualification/0.2.0.md",
+        'from: "0.2.0"',
     )
     require("Sources/SwiftHTML/SwiftHTML.docc/SwiftHTML.md", "<doc:StructuralDOM>", "``HTMLNode``")
-    require("Sources/SwiftHTML/SwiftHTML.docc/GettingStarted.md", "Swift tools 6.4", "macOS 15")
+    require("Sources/SwiftHTML/SwiftHTML.docc/GettingStarted.md",
+            "Swift tools 6.4", "macOS 15", 'from: "0.2.0"')
     require("Sources/SwiftHTML/SwiftHTML.docc/StructuralDOM.md", "0.2.0", "postparse", "WASI")
     require("Sources/SwiftHTML/SwiftHTML.docc/SafetyAndOwnership.md", "0.2.0", "non-Sendable")
     require("Documentation/VALIDATION.md", "Current release line: SwiftHTML 0.2.0", "historical")
@@ -38,6 +40,29 @@ def main() -> None:
     require("Documentation/Qualification/0.2.0.md",
             "8a1d75b206d87538dda2be304365e5a50bf0bf31",
             "44916317312", "44916317402", "44916317296", "44916317332")
+    require("Documentation/Qualification/0.2.0.md",
+            "9e5922e19fb45d3c97c72a57cca58adb2f799c78",
+            "44926283244", "44926283151", "44926283233", "44926283145")
+    require("Scripts/test-public-release-consumer.py",
+            "EXPECTED_REVISION", "git", 'exact: "0.2.0"', "Package.resolved")
+    require(".github/workflows/public-release-consumer.yml",
+            "test-public-release-consumer.py", "swift@sha256:")
+    for path in (
+        "README.md", "CHANGELOG.md",
+        "Documentation/Releases/0.2.0.md",
+        "Documentation/Qualification/0.2.0.md",
+        "Documentation/VALIDATION.md",
+        "Sources/SwiftHTML/SwiftHTML.docc/GettingStarted.md",
+        "Sources/SwiftHTML/SwiftHTML.docc/StructuralDOM.md",
+    ):
+        content = (ROOT / path).read_text(encoding="utf-8").lower()
+        for stale in (
+            "public tag is pending", "not yet published",
+            "release candidate; public tag pending",
+            "uncreated tag", "tag and github release are not yet created",
+        ):
+            if stale in content:
+                raise ValueError(f"{path}: obsolete prerelease wording {stale!r}")
     for filename in ("SwiftSoup-MIT.txt", "LRUCache-MIT.txt"):
         if not (ROOT / "Sources/SwiftHTML/Resources/ThirdPartyLicenses" / filename).is_file():
             raise ValueError(f"Missing bundled third-party notice: {filename}")
