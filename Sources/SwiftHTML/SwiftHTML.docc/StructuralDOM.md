@@ -1,7 +1,8 @@
 # Structural DOM: nodes and finite traversals
 
-This guide describes the **0.2.0 development API**. It is not yet part
-of the published SwiftHTML 0.1.1 release.
+This guide describes the structural DOM introduced in **SwiftHTML 0.2.0**.
+The current public `0.1.1` tag does not include this API; the versioned
+`0.2.0` source becomes installable once its release tag is published.
 
 Use live node references to inspect an HTML document in parsed order, including
 mixed text, element, comment and data nodes. The public interface does not
@@ -76,15 +77,19 @@ sanitization, safe URL resolution, hard CPU cancellation, or an RSS bound.
 
 ## Platform profile
 
-The development package requires Swift tools **6.4** and Swift 6 language mode;
-the unchanged vendored backend is compiled in Swift 5 mode. Swift 6.4.2 is the
-CI qualification baseline. Apple minimums are macOS 15, iOS 15, tvOS 15,
-watchOS 9, Mac Catalyst 15 and visionOS 1.
+The 0.2.0 package requires Swift tools **6.4** (qualified with 6.4.2)
+and Swift 6 language mode for the public API. The vendored backend
+compiles in Swift 5 language mode **with the same Swift 6.4.2 compiler**.
+Apple minimums: macOS 15, iOS 15, tvOS 15, watchOS 9,
+Mac Catalyst 15 and visionOS 1.
 
-Linux native tests, a macOS 15 consumer, optional Xcode 27 cross-builds,
-and a WebAssembly WASI linked-consumer gate have separate CI workflows.
-**A platform is not qualified until its exact-source checks pass.**
-A linked WASI executable is not proof of behavior in all browser hosts.
+Linux native debug and optimized tests, a real macOS 15 Intel consumer and
+WASI build, linking **and executed consumer** succeeded on the merged
+0.2.0 implementation baseline. WASI is **not** proven for browser hosts
+or by a full WASI XCTest run. The optional Xcode 27 cross-build matrix
+for iOS/tvOS/watchOS/Catalyst/visionOS was skipped, so qualification for
+those declared Apple targets remains open. See the
+[qualification matrix](../../../../Documentation/Qualification/0.2.0.md).
 
 ## Migration from SwiftHTML 0.1.1
 
